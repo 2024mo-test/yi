@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex, nofollow">
+    <title>국가유산관련법령 모의고사</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap"
+        rel="stylesheet">
+
+    <!-- 부트스트랩 CSS 추가 -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- 부트스트랩 JS 및 제이쿼리 추가 -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        /* 1️⃣ 전체 기본값: 시험지 본문 */
+        body {
+            font-family: 'Noto Serif KR', serif;
+            color: #000;
+            font-size: 20px;
+            line-height: 1.7;
+        }
+
+        body {
+            background-color: #e0e0e0;
+            /* 전체 배경 명암 처리 */
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            padding-top: 20px;
+        }
+
+        /* 전체 컨테이너 */
+        .container {
+            width: 25cm;
+            /* 전체 시험지 크기 */
+            background-color: white;
+            /* 시험지 영역을 화이트로 */
+            margin: 0 auto;
+            /* 중앙 정렬 */
+            padding: 50px;
+            box-sizing: border-box;
+            margin-bottom: 30px;
+        }
+
+        /* 페이지 하단의 이전/다음 버튼 */
+        .footer {
+            position: absolute;
+            bottom: -60px;
+            /* 문제지 박스 외곽 경계선 아래에 위치 */
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 10px;
+            /* 버튼과 좌우 화면 끝 사이 간격 */
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            width: auto;
+            /* 버튼의 너비가 경계선을 넘지 않게 자동으로 조정 */
+        }
+
+        /* 헤드 영역 */
+        .header {
+            width: 100%;
+            max-width: 24cm;
+            /* 18cm로 고정된 시험지 폭 */
+            height: 50px;
+            border: 2px solid black;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 8px;
+            /* 상단 패딩 */
+
+            box-sizing: border-box;
+            background-color: rgba(220, 220, 220, 0.5);
+            /* 약한 회색 배경 */
+            line-height: 50px;
+        }
+
+        .left-header {
+            padding-left: 20px;
+            /* 좌측 텍스트를 안으로 넣음 */
+        }
+
+        .right-header {
+            padding-right: 40px;
+            /* 우측 텍스트를 안으로 넣음 */
+        }
+
+        /* 문제 영역의 좌우 배치 대신 위아래 배치 */
+        .problem-area {
+            width: 22cm;
+            border: none;
+            /* 외곽 경계선 제거 */
+            padding: 40px;
+            box-sizing: border-box;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            /* 세로 방향으로 배치 */
+            position: relative;
+            font-size: 17px !important;
+        }
+
+        /* 문제 영역에 임시 배경 컬러 추가 */
+        .question {
+            margin-bottom: 23px !important;
+            /* 질문지와 질문지 사이 간격 줄이기 */
+            padding: 5px;
+            background-color: transparent;
+            /* 문제 내부는 흰색으로 강조 */
+
+            box-sizing: border-box;
+        }
+
+        /* 질문 텍스트 줄바꿈 설정 */
+        .question p {
+            margin: 8px;
+            /* 질문지와 답지 사이 간격 줄이기 */
+            text-indent: -1em;
+            /* 질문 번호 바로 아래에서 시작되지 않도록 */
+            padding-left: 0.5em;
+            /* 첫 줄 이후 줄 시작을 동일하게 맞춤 */
+        }
+
+        .choices {
+            margin-top: 0px !important;
+            /* 질문지와 답지 사이 간격을 줄이기 */
+        }
+
+        /* 선택지 텍스트 줄바꿈 설정 */
+        .choices .choice {
+            text-indent: -1.5em;
+            /* 선택지 번호 바로 아래에서 줄이 시작되지 않도록 */
+            padding-left: 2em;
+            /* 첫 줄 이후 줄 시작을 동일하게 맞춤 */
+            margin-bottom: 5px;
+        }
+
+        /* 선택지 버튼 활성화 */
+        .choice-button {
+            width: 30px;
+            /* 선택지 버튼의 넓이 */
+            height: 30px;
+            /* 선택지 버튼의 높이 */
+            line-height: 30px;
+            /* 텍스트를 중앙에 배치 */
+            text-align: center;
+            /* 텍스트 중앙 정렬 */
+            border-radius: 50%;
+            /* 둥근 버튼 */
+            padding: 0;
+            /* 추가 여백 없음 */
+            margin-right: 5px;
+            /* 선택지 텍스트와의 간격 */
+            cursor: pointer;
+            box-sizing: border-box;
+            /* 테두리와 내부 여백을 포함한 크기 정의 */
+            position: relative;
+            /* ✔ 표시 위치 기준 */
+        }
+
+        .choice-button.selected::after {
+            content: '✔';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -45%);
+            /* 중심에서 약간 위 */
+            font-size: 19px;
+            font-weight: bold;
+
+            pointer-events: none;
+        }
+
+        .choice-button.selected.correct::after {
+            color: black;
+        }
+
+        /* 오답인 경우 (빨강) */
+        .choice-button.selected.incorrect::after {
+            color: red;
+        }
+
+        /* 버튼에 마우스를 올렸을 때 투명한 원형 실선 유지 */
+        .choice-button:hover {
+            border-color: transparent;
+            /* 여전히 투명 */
+        }
+
+        .choices-horizontal {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            /* 줄바꿈 허용 (선택사항); 2유형 */
+            gap: 10px;
+        }
+
+        .choices-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5px 20px;
+            /* 세로(위 아래 간격) 10px, 가로(좌우 간격) 30px 간격 ; 3유형 */
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 13cm;
+            /* 가로 13cm */
+            height: 7cm;
+            /* 세로 7cm */
+            border-radius: 10px;
+            /* 각 모서리 레디우스 10px */
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            /* 상단 약한 명암 처리 */
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            /* 좌우 정렬 */
+            align-items: center;
+            /* 내용 수직 중앙 정렬 */
+            font-size: 20px;
+            /* 상단 폰트 크기 */
+            font-weight: bold;
+            padding-bottom: 10px;
+            border-bottom: 1px solid lightgray;
+            /* 상단 구분선 */
+            height: 40px;
+            /* 상단의 높이 고정 */
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            /* 확인 버튼 우측 정렬 */
+            border-top: none;
+            /* 보이지 않게 투명 처리 */
+        }
+
+        .modal-body {
+            padding: 6px;
+            font-size: 16px;
+            /* 텍스트 폰트 크기 */
+            line-height: 1.5;
+            /* 줄 간격 설정 */
+        }
+
+        button.confirm-button {
+            width: 50px;
+            /* 버튼의 너비 */
+            height: 30px;
+            /* 버튼의 높이 */
+            padding: 3px 3px;
+            /* 내부 여백 조정 */
+            margin: 0;
+            /* 외부 여백 제거 */
+            line-height: normal;
+            /* 텍스트가 중앙에 위치하도록 */
+            border-radius: 10px;
+            /* 모서리 둥글게 */
+            background-color: rgb(161, 160, 160);
+            /* 버튼 배경색 (녹색) */
+            color: white;
+            /* 버튼 글씨색 */
+            font-size: 16px;
+            /* 폰트 크기 */
+            border: none;
+            /* 테두리 제거 */
+            cursor: pointer;
+            /* 커서 모양 변경 */
+        }
+
+        button.confirm-button:hover {
+            background-color: #45a049;
+            /* 마우스 오버 시 버튼 색상 */
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* 2️⃣ 문제 본문 */
+        .question p {
+            font-family: 'Noto Serif KR', serif;
+            margin-bottom: 14px;
+        }
+
+        /* 3️⃣ 보기 문장 */
+        .choice {
+            font-family: 'Noto Serif KR', serif;
+            line-height: 1.8;
+        }
+
+        /* 4️⃣ 법조문 */
+        .modal-body p {
+            font-family: 'Noto Serif KR', serif;
+            font-size: 15px;
+            line-height: 1.75;
+        }
+
+        /* 5️⃣ 버튼·UI는 고딕 */
+        button,
+        .choice-button,
+        .modal-header,
+        .confirm-button,        
+        .navbar {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        /* 6️⃣ 문제 번호 강조 */
+        .question>p {
+            font-weight: 600;
+        }
+
+        /* 7️⃣ 보기 번호(①②③④) */
+        .choice-button {
+            font-weight: 600;
+            margin-right: 6px;
+
+        }
+
+        /* 8️⃣ 문제 본문 크기 (실제 시험지 기준) */
+        .question p {
+            font-size: 15.7px;
+            line-height: 1.7;
+        }
+
+        /* 9️⃣ 선택지 문장 */
+        .choice {
+            font-size: 15.7px;
+            line-height: 1.75;
+        }
+
+        /* 🔟 법조문 */
+        .modal-body p {
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        /* 선택지 번호 원 안 숫자 강조 완전 제거 */
+        .choice-button {
+            font-weight: 500;
+            /* 기본 두께 */
+            font-size: 15.7px;
+            /* 선택지 텍스트와 동일 */
+            font-family: 'Noto Serif KR', serif;
+
+            /* 클릭은 되되, 시험지처럼 보이게 */
+            cursor: pointer;
+        }
+    </style>
+    <style>
+        #startBtn {
+            width: 68px;
+            height: 32px;
+
+            /* 글자 중앙 정렬 (핵심) */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 0;
+            /* 🔥 핵심 1 */
+            white-space: nowrap;
+            /* 🔥 핵심 2 */
+
+            font-size: 15px;
+            font-weight: 500;
+
+            /* 완만한 테두리 */
+            border-radius: 8px;
+            border: 1px solid #bbb;
+
+            background-color: #f2f2f2;
+            cursor: pointer;
+
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+        }
+
+        /* 마우스 오버 */
+        #startBtn:hover {
+            background-color: #dcdcdc;
+            border-color: #999;
+        }
+
+        /* 클릭 불가 상태 */
+        #startBtn:disabled {
+            background-color: #eee;
+            color: #aaa;
+            cursor: default;
+        }
+    </style>
+
+    <script>
+        function handleChoiceClick(element, isCorrect, modalId) {
+            const questionBox = element.closest('.question'); // 해당 문제 영역
+            const buttons = questionBox.querySelectorAll('.choice-button');
+
+            // 기존 선택 해제 및 클래스 제거
+            buttons.forEach(btn => {
+                btn.classList.remove('selected', 'correct', 'incorrect');
+            });
+
+            // 새 선택 적용
+            element.classList.add('selected');
+            if (isCorrect) {
+                element.classList.add('correct');
+            } else {
+                element.classList.add('incorrect');
+            }
+
+            // 정오답 처리
+            const answerText = document.getElementById(modalId).querySelector('#answerText');
+            answerText.textContent = isCorrect ? '정답입니다!' : '오답입니다.';
+            document.getElementById(modalId).style.display = "block";
+        }
+    </script>
+    <script>
+        function openAnswerModal(isCorrect, modalId) {
+            // 정답 여부 설정
+            const answerText = document.getElementById(modalId).querySelector('#answerText');
+            answerText.textContent = isCorrect ? '정답입니다!' : '오답입니다.';
+
+            // 모달창 열기
+            document.getElementById(modalId).style.display = "block";
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = "none";
+        }
+
+    </script>
+    <style>
+        body {
+            user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+        }
+    </style>
+    <script>
+        document.addEventListener('contextmenu', function (e) {
+            e.preventDefault();
+        });
+        document.addEventListener('selectstart', function (e) {
+            e.preventDefault();
+        });
+    </script>
+
+</head>
+
+<body>
+
+    <!-- 전체 컨테이너 -->
+    <div class="container">
+        <!-- 헤드 영역 -->
+        <div class="header">
+            <div class="left-header">
+                <h1 style="font-size: 24px; font-weight: 550; line-height: normal;">국가유산위원회 규정</h1>
+                <!-- 수동 입력 -->
+            </div>
+            <div class="right-header">
+                <h3 style="font-size: 20px; line-height: normal;"> (2026. 10) </h3> <!-- 수동 입력 -->
+            </div>
+        </div>
+        <!-- 문제 영역 -->
+        <div class="problem-area">
+            <!-- 좌측 문제 칸 -->
+            <div class="left-column">                
+                <!-- 문제 영역 -->
+                <div class="question">
+                    <p>1.「국가유산위원회 규정」및 관련 법령의 내용에 관한 설명이다. 옳지 않은 것은? </p>
+                    <div class="choices">
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, false, 'answerModal1')">①</span>
+                            “국가유산위원회 규정”은 「국가유산기본법」제9조에 따른 국가유산위원회의 구성과 운영 등에 관한 사항을 규정함을 목적으로 한다.
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, false, 'answerModal1')">②</span>
+                            「국가유산기본법」제9조에 따라 국가유산의 보존ㆍ관리 및 활용에 관한 사항을 조사ㆍ심의하기 위하여 국가유산청 소속으로 국가유산위원회를 둔다.
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button" onclick="handleChoiceClick(this, false, 'answerModal1')">③</span>
+                            국가유산위원회는 국가유산의 유형별 기본계획 수립에 관한 사항을 조사ㆍ심의한다.  
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, true, 'answerModal1')">④</span> 
+                            국가유산의 세계유산, 세계기록유산 및 인류무형문화유산으로의 등재 신청에 관한 사항은 국가유산위원회의 조사ㆍ심의 사항이다.   
+                        </div>
+                    </div>
+                </div>
+                <!-- 문제 영역이 끝나는 부분 아래에 배치 -->
+                <div id="answerModal1" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <span id="answerText">정답입니다!</span> <!-- 좌측 정답 여부 표시 -->
+                            <button class="confirm-button" onclick="closeModal('answerModal1')">확인</button>
+                            <!-- 우측 끝 확인 버튼 -->
+                        </div>
+                        <!-- 하단 텍스트 영역을 아래에 배치 -->
+                        <div class="modal-body">
+                            <p id="lawText">법조문 ;「국가유산위원회 규정」 제1조, 「국가유산기본법」 제9조 제2호- 참고 법조문 활용 <br> (목적)이 영은 「국가유산기본법」(이하 “법”이라 한다) 제9조에 따른 국가유산위원회의 구성과 운영 등에 관한 사항을 규정함을 목적으로 한다.<br>
+                            참고: 2. 제31조제1항에 따른 국가유산의 세계유산 및 인류무형문화유산으로의 등재 신청에 관한 사항
+                            </p> <!-- 법조문 표시 -->
+                        </div>
+                    </div>
+                </div>
+                <!-- 문제 영역 -->
+                <div class="question">
+                    <p>2.「국가유산위원회 규정」및 관련 법령의 내용이다.「국가유산기본법」제9조 제6호와 관련하여 「문화유산의 보존 및 활용에 관한 법률」(이하 ‘법’이라 한다)에 따른 다음 각 목의 사항 중 국가유산위원회의 조사ㆍ심의 대상이 아닌 것은?
+                    </p>
+                    <div class="choices">
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, false, 'answerModal2')">①</span>
+                            이 법에 따른 보물, 국보, 사적 및 국가민속문화유산(이하 “국가지정문화유산”이라 한다)의 지정 및 그 지정의 해제 
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button" onclick="handleChoiceClick(this, false, 'answerModal2')">②</span>
+                            이 법에 따른 보호물 또는 보호구역의 지정 및 조정과 지정의 해제나 그 범위의 조정
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, true, 'answerModal2')">③</span>
+                            이 법에 따른 보호물 또는 보호구역의 지정 및 조정의 적정성 검토
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, false, 'answerModal2')">④</span>
+                            이 법에 따른 국가지정문화유산(사적은 제외한다)의 국외 반출 허가 및 반출 기간의 연장 허가
+                        </div>
+                    </div>
+                </div>
+                <!-- 문제 영역이 끝나는 부분 아래에 배치 -->
+                <div id="answerModal2" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <span id="answerText">정답입니다!</span> <!-- 좌측 정답 여부 표시 -->
+                            <button class="confirm-button" onclick="closeModal('answerModal2')">확인</button>
+                            <!-- 우측 끝 확인 버튼 -->
+                        </div>
+                        <!-- 하단 텍스트 영역을 아래에 배치 -->
+                        <div class="modal-body">
+                            <p id="lawText">법조문 ; 「국가유산위원회 규정」 제1조, 「국가유산기본법」 제9조 제6호- 참고 법조문 활용 <br> (목적)이 영은 「국가유산기본법」(이하 “법”이라 한다) 제9조에 따른 국가유산위원회의 구성과 운영 등에 관한 사항을 규정함을 목적으로 한다.<br>
+                            참고: 6.「문화유산의 보존 및 활용에 관한 법률」에 따른 다음 각 목의 사항
+                            </p>
+                            <!-- 법조문 표시 -->
+                        </div>
+                    </div>
+                </div>                
+                <!-- 문제 영역 -->
+                <div class="question">
+                    <p>3.「국가유산위원회 규정」상 국가유산위원회의 구성 및 운영에 관한 내용이다. 옳지 않는 것은?
+                    </p>
+                    <div class="choices">
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, true, 'answerModal3')">①</span>
+                            국가유산위원회 위원의 임기는 2년, 연임할 수 있다. 다만, 보궐위원의 임기는 전임자 임기의 남은 기간으로 한다.
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button" onclick="handleChoiceClick(this, false, 'answerModal3')">②</span>
+                            국가유산의 유형별ㆍ종류별로 업무를 나누어 조사ㆍ심의하기 위하여 국가유산위원회에 분과위원회를 둘 수 있다.
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, false, 'answerModal3')">③</span>
+                            분과위원회는 조사ㆍ심의 등을 위하여 필요한 경우에는 다른 분과위원회와 함께 합동분과위원회를 열 수 있다.
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, false, 'answerModal3')">④</span>
+                            국가유산위원회에는 국가유산청장이나 국가유산위원회의 위원장 또는 각 분과위원회 위원장의 명을 받아 국가유산위원회의 심의사항에 관한 자료수집ㆍ조사 및 연구 등의 업무를 수행하는 비상근 전문위원을 둘 수 있다.
+                        </div>
+                    </div>
+                </div>
+                <!-- 문제 영역이 끝나는 부분 아래에 배치 -->
+                <div id="answerModal3" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <span id="answerText">정답입니다!</span> <!-- 좌측 정답 여부 표시 -->
+                            <button class="confirm-button" onclick="closeModal('answerModal3')">확인</button>
+                            <!-- 우측 끝 확인 버튼 -->
+                        </div>
+                        <!-- 하단 텍스트 영역을 아래에 배치 -->
+                        <div class="modal-body">
+                            <p id="lawText">법조문 ; 「국가유산위원회 규정」 제2조 제3항, 참고 법조문 활용 <br> ③ 위원은 법 제9조의2제3항에 따른 임기가 만료된 경우에도 후임 위원이 위촉될 때까지 계속하여 그 직무를 수행한다.<br>
+                            참고 : 국가유산기본법 제9조의2 제3항 “③ 국가유산위원회 위원의 임기는 2년으로 한다. 다만, 보궐위원의 임기는 전임자 임기의 남은 기간으로 한다.” 등 인용되는 각 조항 
+                            </p>
+                            <!-- 법조문 표시 -->
+                        </div>
+                    </div>
+                </div>
+                <div class="question">
+                    <p>4.「국가유산위원회 규정」상 국가유산위원회의 구성 및 운영에 관한 내용이다. 옳지 않는 것은?</p>
+                    <div class="choices">
+                        <div class="choice">
+                            <span class="choice-button" onclick="handleChoiceClick(this, false, 'answerModal4')">①</span>
+                            「국가유산기본법」(이하 “법”이라 한다)에 따른 국가유산위원회(이하 “위원회”라 한다)의 위원은 국가유산청장이 위촉한다. 
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, true, 'answerModal4')">②</span>
+                            건축, 경영, 고고학, 관광, 국문학사, 도시계획, 동식물학, 미술사, 민속학, 박물관, 법학, 보존과학, 사회학, 언론, 역사학, 인류학, 전통공연예술, 전통공예기술, 조경, 종교, 지구과학, 지질학 또는 환경 분야의 업무에 10년 이상 종사한 경력이 있는 사람은 위원회 위원으로 위촉될 수 있다.
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, false, 'answerModal4')">③</span>
+                            국가유산청장은 이 법에 따른 시ㆍ도유산위원회의 위원인 사람을 위원회의 위원으로 위촉할 수 없다.
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, false, 'answerModal4')">④</span>
+                            위원은 이 법에 따른 임기가 만료된 경우에도 후임 위원이 위촉될 때까지 계속하여 그 직무를 수행한다.
+                        </div>
+                    </div>
+                </div>
+                <!-- 문제 영역이 끝나는 부분 아래에 배치 -->
+                <div id="answerModal4" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <span id="answerText">정답입니다!</span> <!-- 좌측 정답 여부 표시 -->
+                            <button class="confirm-button" onclick="closeModal('answerModal4')">확인</button>
+                            <!-- 우측 끝 확인 버튼 -->
+                        </div>
+                        <!-- 하단 텍스트 영역을 아래에 배치 -->
+                        <div class="modal-body">
+                            <p id="lawText">법조문 ; 「국가유산위원회 규정」 제2조 제1항 제3호 <br> 3. 건축, 경영, 고고학, 관광, 국문학사, 도시계획, 동식물학, 미술사, 민속학, 박물관, 법학, 보존과학, 사회학, 언론, 역사학, 인류학, 전통공연예술, 전통공예기술, 조경, 종교, 지구과학, 지질학 또는 환경 분야의 업무에 10년 이상 종사한 경력이 있는 사람으로서 국가유산에 관한 지식과 경험이 풍부한 사람
+                            </p> <!-- 법조문 표시 -->
+                        </div>
+                    </div>
+                </div>
+                <!-- 문제 영역 -->
+                <div class="question">
+                    <p>5.「국가유산위원회 규정」상 분과위원회에 관한 내용으로 옳지 않은 것은? (기출) 
+                    </p>
+                    <div class="choices">
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, true, 'answerModal5')">①</span>
+                            분과위원회의 간사와 서기는 국가유산청장이 소속공무원 중에서 지명한다.
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, false, 'answerModal5')">②</span>
+                            궁능유산분과위원회 분장사항은 동식물유산분과위원회의 분장사항에서 제외된다.
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button" onclick="handleChoiceClick(this, false, 'answerModal5')">③</span>
+                            근현대문화유산분과위원회 분장사항 및 궁능유산분과위원회 분장사항은 사적분과위원회의 분장사항에서 제외된다.
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, false, 'answerModal5')">④</span>
+                            소위원회 위원은 분과위원회나 합동분과위원회의 위원 중에서 분과위원회의 위원장이나 합동분과위원회의 위원장이 지명한다.
+                        </div>
+                    </div>
+                </div>
+                <!-- 문제 영역이 끝나는 부분 아래에 배치 -->
+                <div id="answerModal5" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <span id="answerText">정답입니다!</span> <!-- 좌측 정답 여부 표시 -->
+                            <button class="confirm-button" onclick="closeModal('answerModal5')">확인</button>
+                            <!-- 우측 끝 확인 버튼 -->
+                        </div>
+                        <!-- 하단 텍스트 영역을 아래에 배치 -->
+                        <div class="modal-body">
+                            <p id="lawText">법조문 ; 국가유산위원회 규정 제14조 제2항  <br> ② 간사는 국가유산청장이 소속 공무원 중에서 지명한다.
+                            </p>
+                            <!-- 법조문 표시 -->
+                        </div>
+                    </div>
+                </div>
+                <!-- ✅ 2유형: 빈칸 또는 괄호 채워넣기형 문제 템플릿 -->
+                <div class="question">
+                    <p>6.「국가유산위원회 규정」상 분과위원회 분장사항 중 궁능유산분과위원회 분장사항을 제외하는 분과위원회를 모두 고른 것은? 
+                    </p>
+                    <!-- 보기 박스 -->
+                    <div class="example-box"
+                        style="margin-top: 10px; margin-bottom: 30px; padding: 10px; padding-left: 30px; background-color: #f4f4f4; border-radius: 5px; text-align: justify;">
+                        <p>ㄱ. 건축문화유산분과위원회</p>
+                        <p>ㄴ. 근현대문화유산분과위원회</p>
+                        <p>ㄷ. 동산문화유산분과위원회</p>
+                        <p>ㄹ. 동식물유산분과위원회</p>
+                        <p>ㅁ. 매장유산분과위원회</p> 
+                        <p>ㅂ. 세계유산분과위원회</p> 
+                        <p>ㅅ. 사적분과위원회</p>                         
+                    </div>
+                    <div class="choices choices-horizontal" style="margin-top: 50px;">
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, false, 'answerModal6')">①</span>
+                            ㄱ. ㄴ. ㄷ. ㄹ. ㅁ
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, false, 'answerModal6')">②</span>
+                            ㄱ. ㄴ. ㄷ. ㅂ 
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button" onclick="handleChoiceClick(this, true, 'answerModal6')">③</span>
+                            ㄱ. ㄴ. ㄷ. ㄹ. ㅅ 
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, false, 'answerModal6')">④</span>
+                            ㄱ. ㄴ. ㄷ. ㅁ. ㅂ. ㅅ 
+                        </div>
+                    </div>
+                </div>
+                <!-- 문제 영역이 끝나는 부분 아래에 배치 -->
+                <div id="answerModal6" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <span id="answerText">정답입니다!</span> <!-- 좌측 정답 여부 표시 -->
+                            <button class="confirm-button" onclick="closeModal('answerModal6')">확인</button>
+                            <!-- 우측 끝 확인 버튼 -->
+                        </div>
+                        <!-- 하단 텍스트 영역을 아래에 배치 -->
+                        <div class="modal-body">
+                            <p id="lawText">법조문 ; 국가유산위원회 규정 제4조 제1항   <br> (분과위원회의 분장사항) ① 법 제9조의2제4항에 따라 위원회에 두는 분과위원회(이하 “분과위원회”라 한다)와 그 분장사항은 다음 각 호와 같다.
+                            </p> <!-- 법조문 표시 -->
+                        </div>
+                    </div>
+                </div>     
+                <!-- 문제 영역 -->
+                <div class="question">
+                    <p>7.「국가유산위원회 규정」상 궁능유산분과위원회 분장사항 및 근현대문화유산분과위원회 분장사항을 해당 분장사항에서 제외하는 분과위원회는? 
+                    </p>
+                    <div class="choices">
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, false, 'answerModal7')">①</span>
+                            건축문화유산분과위원회 
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, false, 'answerModal7')">②</span>
+                            세계유산분과위원회 
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button" onclick="handleChoiceClick(this, true, 'answerModal7')">③</span>
+                            사적분과위원회
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, false, 'answerModal7')">④</span>
+                            지질ㆍ명승ㆍ조경분과위원회
+                        </div>
+                    </div>
+                </div>
+                <!-- 문제 영역이 끝나는 부분 아래에 배치 -->
+                <div id="answerModal7" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <span id="answerText">정답입니다!</span> <!-- 좌측 정답 여부 표시 -->
+                            <button class="confirm-button" onclick="closeModal('answerModal7')">확인</button>
+                            <!-- 우측 끝 확인 버튼 -->
+                        </div>
+                        <!-- 하단 텍스트 영역을 아래에 배치 -->
+                        <div class="modal-body">
+                            <p id="lawText">법조문 ; 국가유산위원회 규정 제4조 제1항 제8호 <br> 8. 사적분과위원회: 「문화유산의 보존 및 활용에 관한 법률」 제2조제1항제3호에 따른 기념물에 관한 사항. 다만, 제2호의 궁능유산분과위원회 분장사항 및 제3호의 근현대문화유산분과위원회 분장사항은 제외한다.
+                            </p>
+                            <!-- 법조문 표시 -->
+                        </div>
+                    </div>
+                </div>
+                <div class="question">
+                    <p>8.「국가유산위원회 규정」상 지질ㆍ명승ㆍ조경분과위원회의 분장사항으로 옳은 것은?  </p>
+                    <div class="choices">
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, false, 'answerModal8')">①</span>
+                            「매장유산 보호 및 조사에 관한 법률」 에 따른 매장유산에 관한 사항
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, false, 'answerModal8')">②</span>
+                            「자연유산의 보존 및 활용에 관한 법률」에 따른 자연유산에 관한 사항
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button" onclick="handleChoiceClick(this, true, 'answerModal8')">③</span>
+                            「자연유산의 보존 및 활용에 관한 법률」에 따른 전통조경에 관한 사항
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, false, 'answerModal8')">④</span> 
+                            궁능유산분과위원회 분장사항 중 이 법에 따른 천연기념물의 국외 반출 허가, 반출 기간의 연장 허가 및 수출 허가에 관한 사항    
+                        </div>
+                    </div>
+                </div>
+                <!-- 문제 영역이 끝나는 부분 아래에 배치 -->
+                <div id="answerModal8" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <span id="answerText">정답입니다!</span> <!-- 좌측 정답 여부 표시 -->
+                            <button class="confirm-button" onclick="closeModal('answerModal8')">확인</button>
+                            <!-- 우측 끝 확인 버튼 -->
+                        </div>
+                        <!-- 하단 텍스트 영역을 아래에 배치 -->
+                        <div class="modal-body">
+                            <p id="lawText">법조문 ; 국가유산위원회 규정 제4조 제1항 제12호  <br> 12. 지질ㆍ명승ㆍ조경분과위원회: 다음 각 목의 사항. 다만, 제2호의 궁능유산분과위원회 분장사항은 제외한다.
+                            </p> <!-- 법조문 표시 -->
+                        </div>
+                    </div>
+                </div>
+                <!-- ✅ 2유형: 빈칸 또는 괄호 채워넣기형 문제 템플릿 -->
+                <div class="question">
+                    <p>9.「국가유산위원회 규정」상 분과위원회 분장사항 중 궁능유산분과위원회 분장사항을 제외하는 분과위원회를 모두 고른 것은? 
+                    </p>
+                    <!-- 보기 박스 -->
+                    <div class="example-box"
+                        style="margin-top: 10px; margin-bottom: 30px; padding: 10px; padding-left: 30px; background-color: #f4f4f4; border-radius: 5px; text-align: justify;">
+                        <p>ㄱ. 근현대문화유산분과위원회</p>
+                        <p>ㄴ. 동식물유산분과위원회</p>
+                        <p>ㄷ. 매장유산분과위원회</p>
+                        <p>ㄹ. 민속문화유산분과위원회</p>
+                        <p>ㅁ. 세계유산분과위원회</p>                                                 
+                    </div>
+                    <div class="choices choices-horizontal" style="margin-top: 50px;">
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, false, 'answerModal9')">①</span>
+                            ㄱ. ㄴ. ㄷ
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, false, 'answerModal9')">②</span>
+                            ㄴ. ㄷ. ㄹ 
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button" onclick="handleChoiceClick(this, false, 'answerModal9')">③</span>
+                            ㄴ. ㄷ. ㄹ. ㅁ 
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, true, 'answerModal9')">④</span>
+                            ㄷ. ㄹ. ㅁ 
+                        </div>
+                    </div>
+                </div>
+                <!-- 문제 영역이 끝나는 부분 아래에 배치 -->
+                <div id="answerModal9" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <span id="answerText">정답입니다!</span> <!-- 좌측 정답 여부 표시 -->
+                            <button class="confirm-button" onclick="closeModal('answerModal9')">확인</button>
+                            <!-- 우측 끝 확인 버튼 -->
+                        </div>
+                        <!-- 하단 텍스트 영역을 아래에 배치 -->
+                        <div class="modal-body">
+                            <p id="lawText">법조문 ; 국가유산위원회 규정 제4조 제1항 <br> (분과위원회의 분장사항) ① 법 제9조의2제4항에 따라 위원회에 두는 분과위원회(이하 “분과위원회”라 한다)와 그 분장사항은 다음 각 호와 같다.
+                            </p> <!-- 법조문 표시 -->
+                        </div>
+                    </div>
+                </div>     
+                <!-- 문제 영역 -->
+                <div class="question">
+                    <p>10.「국가유산위원회 규정」상 분과위원회의 구성 및 운영 등에 관한 규정이다. 옳지 않은 것은? 
+                    </p>
+                    <div class="choices">
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, false, 'answerModal10')">①</span>
+                            분과위원회의 위원 수는 각 분과위원회별로 국가유산청장이 정한다.
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, false, 'answerModal10')">②</span>
+                            분과위원회의 위원은 국가유산청장이 위원의 전문분야를 고려하여 지명한다. 이 경우 필요하다고 인정하는 경우에는 2개 이상의 분과위원회의 위원을 겸직하게 할 수 있다.
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, true, 'answerModal10')">③</span>
+                            분과위원회의 회의는 분과위원회의 위원장이 소집하거나 국가유산청장 또는 분과위원회의 위원 5분의 1 이상의 요구에 따라 개최한다.
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, false, 'answerModal10')">④</span>
+                            이 영에서 규정한 사항 외에 분과위원회의 운영에 필요한 사항은 해당 위원회의 의결을 거쳐 해당 위원회의 장이 정한다.
+                        </div>
+                    </div>
+                </div>
+                <!-- 문제 영역이 끝나는 부분 아래에 배치 -->
+                <div id="answerModal10" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <span id="answerText">정답입니다!</span> <!-- 좌측 정답 여부 표시 -->
+                            <button class="confirm-button" onclick="closeModal('answerModal10')">확인</button>
+                            <!-- 우측 끝 확인 버튼 -->
+                        </div>
+                        <!-- 하단 텍스트 영역을 아래에 배치 -->
+                        <div class="modal-body">
+                            <p id="lawText">법조문 ; 국가유산위원회 규정 제5조 제4항 <br> ④ 분과위원회의 회의는 분과위원회의 위원장이 소집하거나 국가유산청장 또는 분과위원회의 위원 3분의 1 이상의 요구에 따라 개최한다.
+                            </p>
+                            <!-- 법조문 표시 -->
+                        </div>
+                    </div>
+                </div>
+                <div class="question">
+                    <p>11.「국가유산위원회 규정」상 국가유산위원회의 구성과 운영 등에 관한 규정이다. 옳은 것은?   </p>
+                    <div class="choices">
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, true, 'answerModal11')">①</span>
+                            합동분과위원회의 회의는 각 분과위원회의 위원장이 소집하거나 국가유산청장의 요구에 따라 개최한다.
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, false, 'answerModal11')">②</span>
+                            소위원회 위원은 위원회의 위원 중에서 분과위원회 또는 합동분과위원회의 위원장이 지명하되, 필요한 경우에는 위원회 위원이 아닌 사람을 소위원회 위원으로 위촉할 수 있다.
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, false, 'answerModal11')">③</span>
+                            위원회의 사무를 처리하기 위하여 위원회에 간사와 서기 각 1명을 둔다. 해당 간사와 서기는 국가유산청장이 소속 공무원 중에서 지명한다.
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, false, 'answerModal11')">④</span> 
+                            이 규정에서 정한 사항 외에 위원회, 분과위원회 및 합동분과위원회의 운영에 필요한 사항은 국가유산청장이 정한다.     
+                        </div>
+                    </div>
+                </div>
+                <!-- 문제 영역이 끝나는 부분 아래에 배치 -->
+                <div id="answerModal11" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <span id="answerText">정답입니다!</span> <!-- 좌측 정답 여부 표시 -->
+                            <button class="confirm-button" onclick="closeModal('answerModal11')">확인</button>
+                            <!-- 우측 끝 확인 버튼 -->
+                        </div>
+                        <!-- 하단 텍스트 영역을 아래에 배치 -->
+                        <div class="modal-body">
+                            <p id="lawText">법조문 ; 국가유산위원회 규정 제6조 <br> 제6조(합동분과위원회) 법 제9조의2제5항에 따른 합동분과위원회(이하 “합동분과위원회”라 한다)의 회의는 각 분과위원회의 위원장이 소집하거나 국가유산청장의 요구에 따라 개최하며, 그 위원장은 합동분과위원회 위원 중에서 호선한다.
+                            </p> <!-- 법조문 표시 -->
+                        </div>
+                    </div>
+                </div>
+                <!-- ✅ 2유형: 빈칸 또는 괄호 채워넣기형 문제 템플릿 -->
+                <div class="question">
+                    <p>12.「국가유산위원회 규정」상 회의록의 비공개에 관한 내용이다. “특정인의 재산상의 이익에 영향을 미치거나 사생활의 비밀을 침해하는 등 대통령령으로 정하는 경우”에 해당하는 내용을 모두 고른 것은? 
+                    </p>
+                    <!-- 보기 박스 -->
+                    <div class="example-box"
+                        style="margin-top: 10px; margin-bottom: 30px; padding: 10px; padding-left: 30px; background-color: #f4f4f4; border-radius: 5px; text-align: justify;">
+                        <p>ㄱ. 국가유산기본법 제9조 각 호의 사항에 관한 조사ㆍ심의가 진행 중에 있어 해당 사항이 공개되면 공정한 조사ㆍ심의에 영향을 줄 우려가 있는 경우</p>
+                        <p>ㄴ. 이 규정에 따른 각 목에 해당하는 사람의 이름ㆍ주민등록번호 등 개인에 관한 사항이 공개되면 재산상의 이익이나 사생활의 비밀 또는 자유를 침해할 우려가 있는 경우</p>
+                        <p>ㄷ. 이 규정에 따른 각 목의 사항에 관한 회의록이 공개되면 당사자의 명예가 훼손될 우려가 있는 경우</p>
+                        <p>ㄹ. 그 밖에 공개되면 위원회, 분과위원회, 합동분과위원회 및 소위원회의 심의의 공정성을 크게 해칠 우려가 있는 경우</p>                                                                        
+                    </div>
+                    <div class="choices choices-horizontal" style="margin-top: 50px;">
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, false, 'answerModal12')">①</span>
+                            ㄱ. ㄴ. ㄷ
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, false, 'answerModal12')">②</span>
+                            ㄱ. ㄴ. ㄹ 
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button" onclick="handleChoiceClick(this, false, 'answerModal12')">③</span>
+                            ㄴ. ㄷ. ㄹ 
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, true, 'answerModal12')">④</span>
+                            ㄱ. ㄴ. ㄷ. ㄹ
+                        </div>
+                    </div>
+                </div>
+                <!-- 문제 영역이 끝나는 부분 아래에 배치 -->
+                <div id="answerModal12" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <span id="answerText">정답입니다!</span> <!-- 좌측 정답 여부 표시 -->
+                            <button class="confirm-button" onclick="closeModal('answerModal12')">확인</button>
+                            <!-- 우측 끝 확인 버튼 -->
+                        </div>
+                        <!-- 하단 텍스트 영역을 아래에 배치 -->
+                        <div class="modal-body">
+                            <p id="lawText">법조문 ; 국가유산위원회 규정 제8조(회의록의 비공개) <br> 법조문 참조
+                            </p> <!-- 법조문 표시 -->
+                        </div>
+                    </div>
+                </div>     
+                <!-- 문제 영역 -->
+                <div class="question">
+                    <p>13.「국가유산위원회 규정」의 내용에 관한 설명으로 옳지 않은 것은? (기출) </p>
+                    <div class="choices">
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, false, 'answerModal13')">①</span>
+                            전문위원의 임기는 2년으로 한다. 다만, 새로 위촉된 전문위원의 임기는 전임자 임기의 남은 기간으로 한다.
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, false, 'answerModal13')">②</span>
+                            합동분과위원회의 의장은 그 합동분과위원회에서 호선한다.
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, true, 'answerModal13')">③</span>
+                            소위원회 위원은 분과위원회나 합동분과위원회의 위원 중에서 국가유산청장이 지명한다.
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, false, 'answerModal13')">④</span>
+                            위원 또는 전문위원이 이 규정이 정하는 제척 사유에 해당하는 경우에는 스스로 해당 안건의 조사 또는 심의ㆍ의결에서 회피(回避)해야 한다.
+                        </div>
+                    </div>
+                </div>
+                <!-- 문제 영역이 끝나는 부분 아래에 배치 -->
+                <div id="answerModal13" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <span id="answerText">정답입니다!</span> <!-- 좌측 정답 여부 표시 -->
+                            <button class="confirm-button" onclick="closeModal('answerModal13')">확인</button>
+                            <!-- 우측 끝 확인 버튼 -->
+                        </div>
+                        <!-- 하단 텍스트 영역을 아래에 배치 -->
+                        <div class="modal-body">
+                            <p id="lawText">법조문 ; 국가유산위원회 규정 제7조 제2항 <br> ② 소위원회 위원은 분과위원회나 합동분과위원회의 위원 중에서 분과위원회의 위원장이나 합동분과위원회의 위원장이 지명한다.
+                            </p>
+                            <!-- 법조문 표시 -->
+                        </div>
+                    </div>
+                </div>
+                <div class="question">
+                    <p>14.「국가유산위원회 규정」상 위원 또는 전문위원의 해촉 사유에 해당하지 않는 것은? </p>
+                    <div class="choices">
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, false, 'answerModal14')">①</span>
+                            위원이 시ㆍ도유산위원회의 위원으로 위촉된 경우   
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, false, 'answerModal14')">②</span>
+                            위원이 국가유산수리업자, 국가유산실측설계업자, 국가유산감리업자가 된 경우
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, true, 'answerModal14')">③</span>
+                            해당 안건의 당사자 신청에 따라 위원회등 의결로 위원이 기피 결정된 경우
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, false, 'answerModal14')">④</span>
+                            위원이 직무와 관련하여 부당하게 영향력을 행사하거나, 부정한 청탁을 받는 등 윤리규정에 위반한 경우   
+                        </div>
+                    </div>
+                </div>
+                <!-- 문제 영역이 끝나는 부분 아래에 배치 -->
+                <div id="answerModal14" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <span id="answerText">정답입니다!</span> <!-- 좌측 정답 여부 표시 -->
+                            <button class="confirm-button" onclick="closeModal('answerModal14')">확인</button>
+                            <!-- 우측 끝 확인 버튼 -->
+                        </div>
+                        <!-- 하단 텍스트 영역을 아래에 배치 -->
+                        <div class="modal-body">
+                            <p id="lawText">법조문 ; 국가유산위원회 규정 제12조 <br> (위원 등의 해촉) 국가유산청장은 위원 또는 전문위원이 다음 각 호의 어느 하나에 해당하는 경우에는 해촉할 수 있다. 
+                            </p> <!-- 법조문 표시 -->
+                        </div>
+                    </div>
+                </div>
+                <!-- 문제 영역 -->
+                <div class="question">
+                    <p>15.「국가유산위원회 규정」중 위원회등에 관한 설명으로 옳지 않은 것은? 
+                    </p>
+                    <div class="choices">
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, false, 'answerModal15')">①</span>
+                            위원등이 해당 안건에 관하여 용역을 수행하거나 그 밖의 방법으로 직접 관여한 경우 위원회등의 조사 또는 심의ㆍ의결에서 제척(除斥)된다.
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, true, 'answerModal15')">②</span>
+                            소위원회 위원은 분과위원회나 합동분과위원회의 위원과 해당 분야의 전문가 중에서 국가유산청장이 지정한다. 
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, false, 'answerModal15')">③</span>
+                            국가유산청장은 위원회등의 위원 또는 전문위원이 제척사유에 해당하는 데에도 불구하고 스스로 회피하지 않은 경우 해촉할 수 있다.
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, false, 'answerModal15')">④</span>
+                            국가유산청장은 국가유산기본법에 따른 시ㆍ도유산위원회의 위원인 사람을 위원회의 위원으로 위촉할 수 없다.
+                        </div>
+                    </div>
+                </div>
+                <!-- 문제 영역이 끝나는 부분 아래에 배치 -->
+                <div id="answerModal15" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <span id="answerText">정답입니다!</span> <!-- 좌측 정답 여부 표시 -->
+                            <button class="confirm-button" onclick="closeModal('answerModal15')">확인</button>
+                            <!-- 우측 끝 확인 버튼 -->
+                        </div>
+                        <!-- 하단 텍스트 영역을 아래에 배치 -->
+                        <div class="modal-body">
+                            <p id="lawText">법조문 ; 국가유산위원회 규정 제7조 제2항  <br> ② 소위원회 위원은 분과위원회나 합동분과위원회의 위원 중에서 분과위원회의 위원장이나 합동분과위원회의 위원장이 지명한다.
+                            </p>
+                            <!-- 법조문 표시 -->
+                        </div>
+                    </div>
+                </div>
+                <div class="question">
+                    <p>16.「국가유산위원회 규정」상 국가유산청장은 위원 또는 전문위원(이하 “위원등”이라 한다)이 다음 각 호의 어느 하나에 해당하는 경우에는 해촉할 수 있다. 옳지 않은 것은? </p>
+                    <div class="choices">
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, false, 'answerModal16')">①</span>
+                            위원등이 「문화유산의 보존 및 활용에 관한 법률」에 따른 문화유산매매업자가 된 경우
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, false, 'answerModal16')">②</span>
+                            위원등이 이 규정에서 정하는 제척사유에 해당함에도 불구하고 회피하지 않은 경우
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, false, 'answerModal16')">③</span>
+                            위원등이 스스로 직무를 수행하기 어렵다는 의사를 밝히는 경우
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, true, 'answerModal16')">④</span> 
+                            위원등이 시ㆍ도유산위원회의 위원등으로 위촉된 경우    
+                        </div>
+                    </div>
+                </div>
+                <!-- 문제 영역이 끝나는 부분 아래에 배치 -->
+                <div id="answerModal16" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <span id="answerText">정답입니다!</span> <!-- 좌측 정답 여부 표시 -->
+                            <button class="confirm-button" onclick="closeModal('answerModal16')">확인</button>
+                            <!-- 우측 끝 확인 버튼 -->
+                        </div>
+                        <!-- 하단 텍스트 영역을 아래에 배치 -->
+                        <div class="modal-body">
+                            <p id="lawText">법조문 ; 국가유산위원회 규정 제12조 제8호 <br> 8. 위원이 시ㆍ도유산위원회의 위원으로 위촉된 경우
+                            </p> <!-- 법조문 표시 -->
+                        </div>
+                    </div>
+                </div>
+                <!-- ✅ 2유형: 빈칸 또는 괄호 채워넣기형 문제 템플릿 -->
+                <div class="question">
+                    <p>17.「국가유산위원회 규정」상 국가유산청장은 위원 또는 전문위원이 다음 어느 하나에 해당하는 자가 된 경우 해촉할 수 있다. 해당하는 자를 모두 고른 것은?  </p>
+                    <!-- 보기 박스 -->
+                    <div class="example-box"
+                        style="margin-top: 10px; margin-bottom: 30px; padding: 10px; padding-left: 30px; background-color: #f4f4f4; border-radius: 5px; text-align: justify;">
+                        <p>ㄱ.「국가유산수리 등에 관한 법률」에 따른 국가유산수리업자, 국가유산실측설계업자 또는 국가유산감리업자 </p>
+                        <p>ㄴ.「문화유산의 보존 및 활용에 관한 법률」에 따른 문화유산매매업자 </p>
+                        <p>ㄷ.「매장유산 보호 및 조사에 관한 법률」에 따른 조사단장, 책임조사원 또는 조사원 </p>
+                        <p>ㄹ.「민법」 제32조에 따라 설립된 비영리법인으로서 매장유산 발굴 관련 사업을 목적으로 설립된 법인의 대표자나 상근 임직원</p>                        
+                    </div>
+                    <div class="choices choices-horizontal" style="margin-top: 50px;">
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, false, 'answerModal17')">①</span>
+                            ㄱ, ㄴ
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, false, 'answerModal17')">②</span>
+                            ㄱ, ㄴ, ㄷ
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button" onclick="handleChoiceClick(this, false, 'answerModal17')">③</span>
+                            ㄱ. ㄴ. ㄷ. ㄹ  
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, true, 'answerModal17')">④</span>
+                            ㄱ, ㄴ, ㄹ
+                        </div>
+                    </div>
+                </div>
+                <!-- 문제 영역이 끝나는 부분 아래에 배치 -->
+                <div id="answerModal17" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <span id="answerText">정답입니다!</span> <!-- 좌측 정답 여부 표시 -->
+                            <button class="confirm-button" onclick="closeModal('answerModal17')">확인</button>
+                            <!-- 우측 끝 확인 버튼 -->
+                        </div>
+                        <!-- 하단 텍스트 영역을 아래에 배치 -->
+                        <div class="modal-body">
+                            <p id="lawText">법조문 ; 국가유산위원회 규정 제12조 제2항  <br> 2. 다음 각 목의 어느 하나에 해당하는 자가 된 경우
+                            </p> <!-- 법조문 표시 -->
+                        </div>
+                    </div>
+                </div>    
+                <!-- 문제 영역 -->
+                <div class="question">
+                    <p>18.「국가유산위원회 규정」상 분과위원회에 관한 설명으로 옳은 것은? (기출) 
+                    </p>
+                    <div class="choices">
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, true, 'answerModal18')">①</span>
+                            분과위원회는 전문적ㆍ효율적 심의를 위해 필요한 경우 소위원회를 구성ㆍ운영할 수 있다.
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, false, 'answerModal18')">②</span>
+                            국가유산청장은 시ㆍ도유산위원회의 위원인 사람을 분과위원회의 위원으로 위촉할 수 있다.
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, false, 'answerModal18')">③</span>
+                            건축문화유산분과위원회의 분장사항은 유형문화유산 중 건조물에 관한 사항으로 「문화유산의 보존 및 활용에 관한 법률」에 따른 기념물 중 근현대 시설물에 관한 사항을 포함한다. 
+                        </div>
+                        <div class="choice">
+                            <span class="choice-button"
+                                onclick="handleChoiceClick(this, false, 'answerModal18')">④</span>
+                            사적분과위원회의 분장사항은 근대현대문화유산분과위원회 분장사항을 포함한다.
+                        </div>
+                    </div>
+                </div>
+                <!-- 문제 영역이 끝나는 부분 아래에 배치 -->
+                <div id="answerModal18" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <span id="answerText">정답입니다!</span> <!-- 좌측 정답 여부 표시 -->
+                            <button class="confirm-button" onclick="closeModal('answerModal18')">확인</button>
+                            <!-- 우측 끝 확인 버튼 -->
+                        </div>
+                        <!-- 하단 텍스트 영역을 아래에 배치 -->
+                        <div class="modal-body">
+                            <p id="lawText">법조문 ; 국가유산위원회 규정 제7조 제1항  <br> (소위원회의 구성 및 운영) ① 분과위원회나 합동분과위원회는 전문적ㆍ효율적 심의를 위해 필요한 경우 소위원회를 구성ㆍ운영할 수 있다.
+                            </p>
+                            <!-- 법조문 표시 -->
+                        </div>
+                    </div>
+                </div>     
+            </div>
+        </div>
+        <!-- 좌우 이동 버튼 -->
+        <div style="display: flex; justify-content: space-between; margin-top: 40px;">
+            <button onclick="goToPrev()" style="
+                width: 80px;
+                height: 35px;
+                font-size: 15px;
+                padding: 6px 10px;
+                background-color: #e8e7e7;
+                border: 1px solid #e8e7e7; /* 배경색과 동일하게 */
+                border-radius: 6px;">
+                ← 이전
+            </button>
+            <button onclick="goToNext()" style="
+                width: 80px;
+                height: 35px;
+                font-size: 15px;
+                padding: 6px 10px;
+                background-color: #e8e7e7;
+                border: 1px solid #e8e7e7;
+                border-radius: 6px;">
+                →
+            </button>
+        </div>
+        <!-- ✅ 저작권 문구 -->
+        <div style="text-align: center; margin-top: 30px;">
+            <p style="font-size: 13px; color: #999;">
+                ※ 이 모의고사 문제는 저작권 보호를 받으며, 무단 복제·배포·인용을 금합니다.
+            </p>
+        </div>
+    </div>
+    <script>
+        function goToPrev() {
+            // 이전 페이지 링크로 이동
+            window.location.href = "https://contents.premium.naver.com/2026/2024mocktest/contents/261016163324623dn";  // ← 원하는 URL로 교체
+        }
+
+        function goToNext() {
+            // 처음 페이지 링크로 이동
+            window.location.href = "";  // ← 원하는 URL로 교체
+        }
+    </script>
+
+</body>
+
+</html>
